@@ -1,0 +1,15 @@
+11:10:38  Running with dbt=1.12.6
+11:10:38  Registered adapter: redshift=1.11.1
+11:10:39  Unable to do partial parsing because profile has changed
+11:10:40  Found 6 models, 4 data tests, 3 sources, 567 macros
+11:10:40  
+11:10:40  Concurrency: 4 threads (target='dev')
+11:10:40  
+11:10:55  1 of 1 START sql table model analytics.staging_sales ........................... [RUN]
+11:11:15  1 of 1 OK created sql table model analytics.staging_sales ...................... [SUCCESS in 19.65s]
+11:11:18  
+11:11:18  Finished running 1 table model in 0 hours 0 minutes and 37.60 seconds (37.60s).
+11:11:18  
+11:11:18  Completed successfully
+11:11:18  
+11:11:18  Done. PASS=1 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=1

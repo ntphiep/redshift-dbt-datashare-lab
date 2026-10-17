@@ -1,0 +1,29 @@
+11:04:44  Running with dbt=1.12.6
+11:04:44  Registered adapter: redshift=1.11.1
+11:04:44  Unable to do partial parsing because saved manifest not found. Starting full parse.
+11:04:46  Found 6 models, 4 data tests, 3 sources, 567 macros
+11:04:46  
+11:04:46  Concurrency: 4 threads (target='dev')
+11:04:46  
+11:05:06  1 of 8 START test source_not_null_ds_event_eventid ............................. [RUN]
+11:05:06  2 of 8 START test source_not_null_ds_sales_salesid ............................. [RUN]
+11:05:06  3 of 8 START test source_unique_ds_event_eventid ............................... [RUN]
+11:05:06  4 of 8 START test source_unique_ds_sales_salesid ............................... [RUN]
+11:05:14  2 of 8 PASS source_not_null_ds_sales_salesid ................................... [PASS in 8.24s]
+11:05:14  1 of 8 PASS source_not_null_ds_event_eventid ................................... [PASS in 8.50s]
+11:05:15  3 of 8 PASS source_unique_ds_event_eventid ..................................... [PASS in 8.60s]
+11:05:15  5 of 8 START sql table model analytics.staging_event ........................... [RUN]
+11:05:16  4 of 8 PASS source_unique_ds_sales_salesid ..................................... [PASS in 9.65s]
+11:05:16  6 of 8 START sql table model analytics.staging_sales ........................... [RUN]
+11:05:29  5 of 8 OK created sql table model analytics.staging_event ...................... [SUCCESS in 14.66s]
+11:06:00  6 of 8 OK created sql table model analytics.staging_sales ...................... [SUCCESS in 43.94s]
+11:06:00  7 of 8 START sql table model analytics.rpt_finance_qtr_total_sales_by_event .... [RUN]
+11:06:12  7 of 8 OK created sql table model analytics.rpt_finance_qtr_total_sales_by_event  [SUCCESS in 12.33s]
+11:06:12  8 of 8 START sql table model analytics.rpt_finance_qtr_top_event_by_sales ...... [RUN]
+11:06:21  8 of 8 OK created sql table model analytics.rpt_finance_qtr_top_event_by_sales . [SUCCESS in 9.57s]
+11:06:25  
+11:06:25  Finished running 4 table models, 4 data tests in 0 hours 1 minutes and 39.07 seconds (99.07s).
+11:06:25  
+11:06:25  Completed successfully
+11:06:25  
+11:06:25  Done. PASS=8 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=8

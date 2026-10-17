@@ -1,0 +1,33 @@
+Timing is on.
+CREATE USER dbt_user PASSWORD '<dbt_pw>';
+CREATE USER
+Time: 474.807 ms
+SELECT share_name, share_type, producer_namespace FROM svv_datashares;
+ share_name | share_type |                        producer_namespace                        
+------------+------------+------------------------------------------------------------------
+ dbtdsdemo  | INBOUND    | <producer-namespace-id>                            
+(1 row)
+
+Time: 340.730 ms
+CREATE DATABASE tickit WITH PERMISSIONS FROM DATASHARE dbtdsdemo OF NAMESPACE '<producer-namespace-id>';
+CREATE DATABASE
+Time: 484.022 ms
+GRANT USAGE ON DATABASE tickit TO dbt_user;
+GRANT
+Time: 475.989 ms
+GRANT USAGE ON SCHEMA tickit.dsdemo TO dbt_user;
+GRANT
+Time: 905.696 ms
+GRANT SELECT ON tickit.dsdemo.event, tickit.dsdemo.sales, tickit.dsdemo.users TO dbt_user;
+GRANT
+Time: 629.330 ms
+GRANT CREATE ON DATABASE dev TO dbt_user;
+GRANT
+Time: 423.347 ms
+SELECT count(*) AS sales_rows FROM tickit.dsdemo.sales;
+ sales_rows 
+------------
+   50000000
+(1 row)
+
+Time: 3501.142 ms (00:03.501)

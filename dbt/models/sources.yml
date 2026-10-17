@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: ds
+    database: tickit
+    schema: dsdemo
+    tables:
+      - name: event
+        columns:
+          - name: eventid
+            data_tests: [not_null, unique]
+      - name: sales
+        columns:
+          - name: salesid
+            data_tests: [not_null, unique]
+      - name: users

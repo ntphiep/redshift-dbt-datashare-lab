@@ -1,0 +1,33 @@
+== before
+SELECT 'datashare' AS source, count(*) AS rows FROM tickit.dsdemo.sales
+UNION ALL SELECT 'dbt table copy', count(*) FROM analytics.staging_sales
+UNION ALL SELECT 'late-binding view', count(*) FROM analytics.staging_sales_live;
+      source       |   rows   
+-------------------+----------
+ dbt table copy    | 50000000
+ datashare         | 50000000
+ late-binding view | 50000000
+(3 rows)
+
+== insert on the producer
+INSERT INTO dsdemo.sales
+SELECT 50000000 + row_number() OVER (ORDER BY salesid), eventid, sellerid, buyerid, qtysold, pricepaid, commission, getdate()
+FROM (SELECT * FROM dsdemo.sales LIMIT 1000);
+INSERT 0 1000
+SELECT count(*) AS producer_rows FROM dsdemo.sales;
+ producer_rows 
+---------------
+      50001000
+(1 row)
+
+== after
+SELECT 'datashare' AS source, count(*) AS rows FROM tickit.dsdemo.sales
+UNION ALL SELECT 'dbt table copy', count(*) FROM analytics.staging_sales
+UNION ALL SELECT 'late-binding view', count(*) FROM analytics.staging_sales_live;
+      source       |   rows   
+-------------------+----------
+ datashare         | 50001000
+ dbt table copy    | 50000000
+ late-binding view | 50001000
+(3 rows)
+

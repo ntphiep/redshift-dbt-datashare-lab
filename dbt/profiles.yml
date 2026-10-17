@@ -1,0 +1,14 @@
+dbt_datashare_lab:
+  target: dev
+  outputs:
+    dev:
+      type: redshift
+      host: "{{ env_var('CONSUMER_HOST') }}"
+      port: 5439
+      dbname: dev
+      schema: analytics
+      user: dbt_user
+      password: "{{ env_var('DBT_PASSWORD') }}"
+      sslmode: require
+      datasharing: true
+      threads: 4

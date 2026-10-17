@@ -1,0 +1,72 @@
+Timing is on.
+CREATE SCHEMA dsdemo;
+CREATE SCHEMA
+Time: 436.309 ms
+CREATE TEMP TABLE n AS
+WITH RECURSIVE t(i) AS (SELECT 1 UNION ALL SELECT i + 1 FROM t WHERE i < 1000)
+SELECT i FROM t;
+SELECT
+SELECT
+Time: 352.884 ms
+CREATE TABLE dsdemo.users AS
+SELECT ((a.i - 1) * 200 + b.i)::int AS userid,
+       'user' || ((a.i - 1) * 200 + b.i) AS username,
+       decode((random() * 7)::int, 0,'CA', 1,'NY', 2,'TX', 3,'WA', 4,'FL', 5,'IL', 6,'CO', 'MA') AS state
+FROM n a, n b WHERE a.i <= 1000 AND b.i <= 200;
+SELECT
+SELECT
+Time: 1618.408 ms (00:01.618)
+CREATE TABLE dsdemo.event AS
+SELECT ((a.i - 1) * 20 + b.i)::int AS eventid,
+       'event ' || ((a.i - 1) * 20 + b.i) AS eventname,
+       dateadd(day, (random() * 700)::int, '2024-01-01'::timestamp) AS starttime
+FROM n a, n b WHERE a.i <= 1000 AND b.i <= 20;
+SELECT
+SELECT
+Time: 993.048 ms
+CREATE TABLE dsdemo.sales AS
+SELECT salesid, eventid, sellerid, buyerid, qtysold, pricepaid,
+       (pricepaid * 0.15)::decimal(8,2) AS commission, saletime
+FROM (
+  SELECT ((c.i - 1) * 1000000 + (a.i - 1) * 1000 + b.i)::bigint AS salesid,
+         (random() * 19999)::int + 1 AS eventid,
+         (random() * 199999)::int + 1 AS sellerid,
+         (random() * 199999)::int + 1 AS buyerid,
+         (random() * 7)::int + 1 AS qtysold,
+         ((random() * 900)::int + 20)::decimal(8,2) AS pricepaid,
+         dateadd(second, (random() * 63072000)::int, '2024-01-01'::timestamp) AS saletime
+  FROM n a, n b, n c WHERE c.i <= 50
+);
+SELECT
+SELECT
+Time: 6174.918 ms (00:06.175)
+SELECT 'sales' AS tbl, count(*) FROM dsdemo.sales
+UNION ALL SELECT 'event', count(*) FROM dsdemo.event
+UNION ALL SELECT 'users', count(*) FROM dsdemo.users;
+  tbl  |  count   
+-------+----------
+ sales | 50000000
+ event |    20000
+ users |   200000
+(3 rows)
+
+Time: 531.836 ms
+SELECT current_namespace;
+          current_namespace           
+--------------------------------------
+ <producer-namespace-id>
+(1 row)
+
+Time: 232.083 ms
+CREATE DATASHARE dbtdsdemo SET PUBLICACCESSIBLE TRUE;
+CREATE DATASHARE
+Time: 385.055 ms
+ALTER DATASHARE dbtdsdemo ADD SCHEMA dsdemo;
+ALTER DATASHARE
+Time: 438.849 ms
+ALTER DATASHARE dbtdsdemo ADD TABLE dsdemo.event, dsdemo.sales, dsdemo.users;
+ALTER DATASHARE
+Time: 430.617 ms
+GRANT USAGE ON DATASHARE dbtdsdemo TO NAMESPACE '<consumer-namespace-id>';
+GRANT
+Time: 542.849 ms

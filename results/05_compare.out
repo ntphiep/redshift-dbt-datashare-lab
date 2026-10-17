@@ -1,0 +1,119 @@
+Timing is on.
+SET enable_result_cache_for_session TO off;
+SET
+Time: 236.285 ms
+SELECT "table", tbl_rows, size AS size_mb FROM svv_table_info WHERE "schema" = 'analytics' ORDER BY size DESC;
+                table                 | tbl_rows | size_mb 
+--------------------------------------+----------+---------
+ staging_sales                        | 50000000 |    1792
+ rpt_finance_qtr_total_sales_by_event |   159992 |    1280
+ staging_event                        |    20000 |     364
+ rpt_finance_qtr_top_event_by_sales   |       24 |      70
+(4 rows)
+
+Time: 2525.350 ms (00:02.525)
+
+== report straight on the datashare, run 1
+SELECT date_trunc('quarter', saletime)::date AS sale_quarter, count(*) AS sales, sum(pricepaid) AS revenue
+FROM tickit.dsdemo.sales
+GROUP BY 1 ORDER BY 1;
+ sale_quarter |  sales  |    revenue    
+--------------+---------+---------------
+ 2024-01-01   | 6229209 | 2923561624.00
+ 2024-04-01   | 6234859 | 2927119268.00
+ 2024-07-01   | 6301514 | 2958397814.00
+ 2024-10-01   | 6295855 | 2956314758.00
+ 2025-01-01   | 6162906 | 2893929362.00
+ 2025-04-01   | 6238655 | 2929433957.00
+ 2025-07-01   | 6300733 | 2957867145.00
+ 2025-10-01   | 6236269 | 2926549273.00
+(8 rows)
+
+Time: 940.977 ms
+== report straight on the datashare, run 2
+SELECT date_trunc('quarter', saletime)::date AS sale_quarter, count(*) AS sales, sum(pricepaid) AS revenue
+FROM tickit.dsdemo.sales
+GROUP BY 1 ORDER BY 1;
+ sale_quarter |  sales  |    revenue    
+--------------+---------+---------------
+ 2024-01-01   | 6229209 | 2923561624.00
+ 2024-04-01   | 6234859 | 2927119268.00
+ 2024-07-01   | 6301514 | 2958397814.00
+ 2024-10-01   | 6295855 | 2956314758.00
+ 2025-01-01   | 6162906 | 2893929362.00
+ 2025-04-01   | 6238655 | 2929433957.00
+ 2025-07-01   | 6300733 | 2957867145.00
+ 2025-10-01   | 6236269 | 2926549273.00
+(8 rows)
+
+Time: 716.700 ms
+
+== same report on the table dbt copied, run 1
+SELECT date_trunc('quarter', saletime)::date AS sale_quarter, count(*) AS sales, sum(pricepaid) AS revenue
+FROM analytics.staging_sales
+GROUP BY 1 ORDER BY 1;
+ sale_quarter |  sales  |    revenue    
+--------------+---------+---------------
+ 2024-01-01   | 6229209 | 2923561624.00
+ 2024-04-01   | 6234859 | 2927119268.00
+ 2024-07-01   | 6301514 | 2958397814.00
+ 2024-10-01   | 6295855 | 2956314758.00
+ 2025-01-01   | 6162906 | 2893929362.00
+ 2025-04-01   | 6238655 | 2929433957.00
+ 2025-07-01   | 6300733 | 2957867145.00
+ 2025-10-01   | 6236269 | 2926549273.00
+(8 rows)
+
+Time: 824.092 ms
+== same report on the table dbt copied, run 2
+SELECT date_trunc('quarter', saletime)::date AS sale_quarter, count(*) AS sales, sum(pricepaid) AS revenue
+FROM analytics.staging_sales
+GROUP BY 1 ORDER BY 1;
+ sale_quarter |  sales  |    revenue    
+--------------+---------+---------------
+ 2024-01-01   | 6229209 | 2923561624.00
+ 2024-04-01   | 6234859 | 2927119268.00
+ 2024-07-01   | 6301514 | 2958397814.00
+ 2024-10-01   | 6295855 | 2956314758.00
+ 2025-01-01   | 6162906 | 2893929362.00
+ 2025-04-01   | 6238655 | 2929433957.00
+ 2025-07-01   | 6300733 | 2957867145.00
+ 2025-10-01   | 6236269 | 2926549273.00
+(8 rows)
+
+Time: 712.025 ms
+
+== same report on the late-binding view, run 1
+SELECT date_trunc('quarter', saletime)::date AS sale_quarter, count(*) AS sales, sum(pricepaid) AS revenue
+FROM analytics.staging_sales_live
+GROUP BY 1 ORDER BY 1;
+ sale_quarter |  sales  |    revenue    
+--------------+---------+---------------
+ 2024-01-01   | 6229209 | 2923561624.00
+ 2024-04-01   | 6234859 | 2927119268.00
+ 2024-07-01   | 6301514 | 2958397814.00
+ 2024-10-01   | 6295855 | 2956314758.00
+ 2025-01-01   | 6162906 | 2893929362.00
+ 2025-04-01   | 6238655 | 2929433957.00
+ 2025-07-01   | 6300733 | 2957867145.00
+ 2025-10-01   | 6236269 | 2926549273.00
+(8 rows)
+
+Time: 691.651 ms
+== same report on the late-binding view, run 2
+SELECT date_trunc('quarter', saletime)::date AS sale_quarter, count(*) AS sales, sum(pricepaid) AS revenue
+FROM analytics.staging_sales_live
+GROUP BY 1 ORDER BY 1;
+ sale_quarter |  sales  |    revenue    
+--------------+---------+---------------
+ 2024-01-01   | 6229209 | 2923561624.00
+ 2024-04-01   | 6234859 | 2927119268.00
+ 2024-07-01   | 6301514 | 2958397814.00
+ 2024-10-01   | 6295855 | 2956314758.00
+ 2025-01-01   | 6162906 | 2893929362.00
+ 2025-04-01   | 6238655 | 2929433957.00
+ 2025-07-01   | 6300733 | 2957867145.00
+ 2025-10-01   | 6236269 | 2926549273.00
+(8 rows)
+
+Time: 703.849 ms

@@ -1,0 +1,11 @@
+name: dbt_datashare_lab
+version: '1.0.0'
+profile: dbt_datashare_lab
+
+models:
+  dbt_datashare_lab:
+    staging:
+      +materialized: table
+      +tags: [staging, datashare]
+    finance:
+      +materialized: table
